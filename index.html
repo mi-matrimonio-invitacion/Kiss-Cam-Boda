@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <title>Kiss Cam Boda</title>
+
+
+  <style>
+
+    /* =========================================
+       RESET GENERAL
+    ========================================= */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    html,
+    body {
+
+      width: 100%;
+      height: 100dvh;
+
+      overflow: hidden;
+
+      background: #000;
+
+      font-family:
+        'Segoe UI',
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+      /*
+        Permite controlar mejor
+        los gestos táctiles.
+      */
+
+      touch-action: manipulation;
+
+    }
+
+
+    /* =========================================
+       CONTENEDOR PRINCIPAL
+    ========================================= */
+
+    .container {
+
+      position: relative;
+
+      width: 100vw;
+      height: 100dvh;
+
+      overflow: hidden;
+
+      background: #000;
+
+    }
+
+
+    /* =========================================
+       VIDEO DE LA CÁMARA
+    ========================================= */
+
+    video {
+
+      position: absolute;
+
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+
+      display: block;
+
+      z-index: 1;
+
+    }
+
+
+    /* =========================================
+       MARCO DECORATIVO
+       
+       El texto KISS CAM ya está incluido
+       dentro del PNG.
+    ========================================= */
+
+    .frame-overlay {
+
+      position: absolute;
+
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+
+      margin: 0;
+      padding: 0;
+
+      display: block;
+
+      pointer-events: none;
+
+      z-index: 10;
+
+    }
+
+
+    .frame-overlay img {
+
+      position: absolute;
+
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+
+      margin: 0;
+      padding: 0;
+
+      display: block;
+
+      /*
+        El PNG ocupa exactamente
+        toda la pantalla.
+      */
+
+      object-fit: fill;
+
+      pointer-events: none;
+
+    }
+
+
+    /* =========================================
+       CAPA DE INTERFAZ
+    ========================================= */
+
+    .overlay {
+
+      position: absolute;
+
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+
+      pointer-events: none;
+
+      z-index: 20;
+
+    }
+
+
+    /* =========================================
+   BANNER INFERIOR (LETRERO LED MÓVIL)
+========================================= */
+
+.bottom-bar {
+  position: absolute;
+  left: 50%;
+
+  /* 
+    SI NECESITAS BAJAR O SUBIR UN POCO EL BANNER:
+    Ajusta este valor 'bottom' (ej. 12px, 14px, 16px) 
+    hasta que caiga exacto en el centro del marco.
+  */
+  bottom: 3px; 
+
+  transform: translateX(-50%);
+  
+  /* Hacemos el banner más ancho hacia los lados */
+  width: 60vw;
+  max-width: 500px;
+  height: 25px;
+
+  /* Mantiene el texto dentro de la cápsula */
+  overflow: hidden; 
+
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+}
+
+
+/* =========================================
+   TEXTO EN MOVIMIENTO (ANIMACIÓN MARQUEE)
+========================================= */
+
+.footer-text {
+  display: flex;
+  width: max-content;
+  
+  /* Ajusta los segundos (ej. 10s, 12s, 15s) para cambiar la velocidad */
+  animation: marquee-scroll 12s linear infinite;
+  will-change: transform;
+}
+
+/* Grupo de ítems para el bucle */
+.marquee-group {
+  display: flex;
+  align-items: center;
+  gap: 120px; /* Espacio entre las frases */
+  padding-right: 120px; /* Mismo espacio para el empalme invisible */
+}
+
+.footer-text span {
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 60px;
+  white-space: nowrap;
+}
+
+/* 
+   Animación continua: 
+   Comienza en 0% (texto visible de inmediato) 
+   y se desplaza suavemente hasta la mitad (-50%).
+*/
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+
+    /* =========================================
+       ICONO DE BESO
+    ========================================= */
+
+    .kiss {
+
+      font-size:
+        1rem;
+
+      line-height:
+        1;
+
+      flex-shrink:
+        0;
+
+      animation:
+        pulse 0.9s infinite alternate;
+
+    }
+
+
+    /* =========================================
+       ICONO DE CERVEZA
+    ========================================= */
+
+    .glass {
+
+      font-size:
+        1rem;
+
+      line-height:
+        1;
+
+      flex-shrink:
+        0;
+
+      animation:
+        pulse 0.9s infinite alternate;
+
+    }
+
+
+    /* =========================================
+       ANIMACIÓN
+    ========================================= */
+
+    @keyframes pulse {
+
+      from {
+
+        transform:
+          scale(1);
+
+      }
+
+      to {
+
+        transform:
+          scale(1.25);
+
+      }
+
+    }
+
+
+    /* =========================================
+       GRUPO DE BOTONES
+       
+       Se ubica en el costado
+       inferior derecho.
+    ========================================= */
+
+    .controls {
+
+      position: absolute;
+
+      right: 10px;
+
+      bottom: 10px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      gap: 6px;
+
+      pointer-events: auto;
+
+      /* Transición suave para el cambio de tamaño */
+  transition: transform 0.3s ease;
+
+    }
+
+
+    /* =========================================
+       BOTONES SECUNDARIOS
+       
+       Cambio de cámara
+       Pantalla completa
+    ========================================= */
+
+    .secondary-controls {
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      gap: 6px;
+
+      /*
+        Visibles en modo desbloqueado.
+      */
+
+      opacity:
+        1;
+
+      transform:
+        translateY(0);
+
+      pointer-events:
+        auto;
+
+      transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+
+    }
+
+
+    /* =========================================
+       MODO PROYECCIÓN
+       
+       Los botones secundarios desaparecen.
+    ========================================= */
+
+    .container.projecting
+    .secondary-controls {
+
+      opacity:
+        0;
+
+      transform:
+        translateY(10px);
+
+      pointer-events:
+        none;
+
+    }
+    
+    /* Reduce todo el grupo de controles al 50% pegado a la esquina */
+.container.projecting .controls {
+
+  transform: scale(0.5);
+
+  transform-origin: bottom right;
+
+}
+
+
+    /* =========================================
+       BOTÓN DE PROYECCIÓN
+       
+       Siempre permanece visible.
+    ========================================= */
+
+    #projection {
+
+      width:
+        34px;
+
+      height:
+        34px;
+
+      font-size:
+        0.95rem;
+
+    }
+
+
+    /* =========================================
+       BOTONES GENERALES
+    ========================================= */
+
+    .btn-icon {
+
+      background:
+        rgba(0, 0, 0, 0.55);
+
+      color:
+        white;
+
+      border:
+        1px solid
+        rgba(255, 255, 255, 0.4);
+
+      width:
+        32px;
+
+      height:
+        32px;
+
+      border-radius:
+        50%;
+
+      cursor:
+        pointer;
+
+      font-size:
+        0.85rem;
+
+      display:
+        flex;
+
+      justify-content:
+        center;
+
+      align-items:
+        center;
+
+      transition:
+        background 0.2s,
+        transform 0.1s,
+        box-shadow 0.2s;
+
+      flex-shrink:
+        0;
+
+      -webkit-tap-highlight-color:
+        transparent;
+
+      user-select:
+        none;
+
+      touch-action:
+        manipulation;
+
+    }
+
+
+    /* =========================================
+       EFECTO AL PRESIONAR
+    ========================================= */
+
+    .btn-icon:active {
+
+      transform:
+        scale(0.9);
+
+      background:
+        rgba(255, 255, 255, 0.3);
+
+    }
+
+
+    /* =========================================
+       BOTÓN DE PROYECCIÓN
+       
+       Color lila para diferenciarlo.
+    ========================================= */
+
+    #projection {
+
+      border-color:
+        rgba(181, 126, 220, 0.7);
+
+      box-shadow:
+        0 0 8px
+        rgba(181, 126, 220, 0.25);
+
+    }
+
+
+    /* =========================================
+       INDICADOR VISUAL:
+       MODO PROYECCIÓN ACTIVO
+    ========================================= */
+
+    .container.projecting
+    #projection {
+
+      background:
+        rgba(181, 126, 220, 0.35);
+
+      border-color:
+        rgba(181, 126, 220, 1);
+
+      box-shadow:
+        0 0 10px
+        rgba(181, 126, 220, 0.65);
+
+    }
+
+
+    /* =========================================
+   FORZAR ORIENTACIÓN HORIZONTAL
+========================================= */
+
+/* Eliminamos la carga de la imagen vertical. 
+   Si el usuario sostiene el teléfono en vertical, 
+   forzamos la rotación visual del contenedor a horizontal */
+@media (orientation: portrait) {
+  .container {
+    width: 100dvh;
+    height: 100vw;
+    transform: rotate(90deg);
+    transform-origin: center center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+
+      }
+
+    }
+
+
+    /* =========================================
+       ORIENTACIÓN HORIZONTAL
+    ========================================= */
+
+    @media
+    (orientation: landscape) {
+
+      .frame-overlay img {
+
+        content:
+          url(
+            "assets/frames/marco-kisscam.png"
+          );
+
+      }
+
+
+      .bottom-bar {
+
+        bottom:
+          10px;
+
+        padding:
+          4px 10px;
+
+      }
+
+
+      .footer-text {
+
+        font-size:
+          0.8rem;
+
+      }
+
+
+      .controls {
+
+        right:
+          10px;
+
+        bottom:
+          10px;
+
+      }
+
+    }
+
+
+    /* =========================================
+       PANTALLAS VERTICALES PEQUEÑAS
+    ========================================= */
+
+    @media
+    (orientation: portrait)
+    and (max-width: 380px) {
+
+
+      .bottom-bar {
+
+        padding:
+          4px 8px;
+
+      }
+
+
+      .footer-text {
+
+        font-size:
+          0.72rem;
+
+      }
+
+
+      .controls {
+
+        right:
+          8px;
+
+        bottom:
+          8px;
+
+        gap:
+          5px;
+
+      }
+
+
+      .secondary-controls {
+
+        gap:
+          5px;
+
+      }
+
+
+      .btn-icon {
+
+        width:
+          29px;
+
+        height:
+          29px;
+
+        font-size:
+          0.75rem;
+
+      }
+
+
+      #projection {
+
+        width:
+          32px;
+
+        height:
+          32px;
+
+        font-size:
+          0.85rem;
+
+      }
+
+    }
+
+
+    /* =========================================
+       MODO PROYECCIÓN:
+       BANNER INFERIOR UN POCO MÁS ABAJO
+       
+       El banner ya está en posición inferior,
+       por lo que se mantiene fijo.
+    ========================================= */
+
+    .container.projecting
+    .bottom-bar {
+
+      bottom:
+        10px;
+
+    }
+
+
+    /* =========================================
+       MODO PANTALLA COMPLETA
+    ========================================= */
+
+    :fullscreen {
+
+      width:
+        100vw;
+
+      height:
+        100dvh;
+
+      background:
+        #000;
+
+    }
+
+
+    :fullscreen .container {
+
+      width:
+        100vw;
+
+      height:
+        100dvh;
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- =========================================
+       APLICACIÓN
+  ========================================= -->
+
+  <div
+    class="container"
+    id="app"
+  >
+
+
+    <!-- =======================================
+         CÁMARA
+    ======================================== -->
+
+    <video
+      id="camera"
+      autoplay
+      playsinline
+      muted
+    ></video>
+
+
+    <!-- =======================================
+         MARCO DECORATIVO
+         
+         KISS CAM ya viene incluido
+         dentro de los archivos PNG.
+    ======================================== -->
+
+    <picture
+      class="frame-overlay"
+    >
+
+      <img
+        src="assets/frames/marco-kisscam.png"
+        alt=""
+      >
+
+    </picture>
+
+
+    <!-- =======================================
+         CAPA DE INTERFAZ
+    ======================================== -->
+
+    <div
+      class="overlay"
+      id="overlay"
+    >
+
+
+      <!-- =====================================
+           BANNER INFERIOR MÓVIL
+
+           💋 ¡Beso o fondo! 🍸
+
+           Siempre visible.
+           Independiente de los botones.
+      ====================================== -->
+
+      <div class="bottom-bar" id="bottom-bar">
+  <div class="footer-text">
+    <span>💋 ¡Beso o fondo! 🍸</span>
+    <span>💋 ¡Beso o fondo! 🍸</span>
+    <span>💋 ¡Beso o fondo! 🍸</span>
+    <span>💋 ¡Beso o fondo! 🍸</span>
+    <span>💋 ¡Beso o fondo! 🍸</span>
+    <span>💋 ¡Beso o fondo! 🍸</span>
+  </div>
+</div>
+
+
+      <!-- =====================================
+           CONTROLES LATERALES
+
+           Se encuentran en la esquina
+           inferior derecha.
+      ====================================== -->
+
+      <div
+        class="controls"
+        id="controls"
+      >
+
+
+        <!-- =================================
+             BOTONES SECUNDARIOS
+
+             Solo aparecen en modo
+             desbloqueado.
+        ================================== -->
+
+        <div
+          class="secondary-controls"
+          id="secondary-controls"
+        >
+
+
+          <!-- CAMBIAR CÁMARA -->
+
+          <button
+            class="btn-icon"
+            id="switch-cam"
+            title="Cambiar Cámara"
+            aria-label="Cambiar Cámara"
+          >
+
+            🔄
+
+          </button>
+
+
+          <!-- PANTALLA COMPLETA -->
+
+          <button
+            class="btn-icon"
+            id="fullscreen"
+            title="Pantalla Completa"
+            aria-label="Pantalla Completa"
+          >
+
+            ⛶
+
+          </button>
+
+
+        </div>
+
+
+        <!-- =================================
+             BOTÓN DE PROYECCIÓN
+
+             Este botón funciona como
+             interruptor entre:
+
+             MODO DESBLOQUEADO
+             MODO PROYECCIÓN
+        ================================== -->
+
+        <button
+          class="btn-icon"
+          id="projection"
+          title="Activar modo proyección"
+          aria-label="Activar modo proyección"
+        >
+
+          📽️
+
+        </button>
+
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =========================================
+       JAVASCRIPT
+  ========================================= -->
+
+  <script>
+
+
+    /* =========================================
+       ELEMENTOS DEL DOM
+    ========================================= */
+
+    const app =
+      document.getElementById(
+        'app'
+      );
+
+
+    const video =
+      document.getElementById(
+        'camera'
+      );
+
+
+    const switchBtn =
+      document.getElementById(
+        'switch-cam'
+      );
+
+
+    const fullscreenBtn =
+      document.getElementById(
+        'fullscreen'
+      );
+
+
+    const projectionBtn =
+      document.getElementById(
+        'projection'
+      );
+
+
+    /* =========================================
+       VARIABLES DE CÁMARA
+    ========================================= */
+
+    let currentStream =
+      null;
+
+
+    let videoTrack =
+      null;
+
+
+    let facingMode =
+      "environment";
+
+
+    /* =========================================
+       VARIABLES DEL ZOOM
+    ========================================= */
+
+    let initialPinchDistance =
+      null;
+
+
+    let currentZoom =
+      1;
+
+
+    let minZoom =
+      1;
+
+
+    let maxZoom =
+      1;
+
+
+    /* =========================================
+       WAKE LOCK
+    ========================================= */
+
+    let wakeLock =
+      null;
+
+
+    /* =========================================
+       ESTADO DEL MODO PROYECCIÓN
+    ========================================= */
+
+    let isProjecting =
+      false;
+
+
+    /* =========================================
+       WAKE LOCK
+    ========================================= */
+
+    async function requestWakeLock() {
+
+
+      try {
+
+
+        if (
+          'wakeLock' in navigator
+        ) {
+
+
+          wakeLock =
+            await navigator.wakeLock.request(
+              'screen'
+            );
+
+
+          console.log(
+            'Wake Lock activado'
+          );
+
+
+        }
+
+
+      } catch (err) {
+
+
+        console.log(
+          "WakeLock:",
+          err.message
+        );
+
+
+      }
+
+
+    }
+
+
+    /* =========================================
+       ACTIVAR MODO PROYECCIÓN
+    ========================================= */
+
+    function enableProjectionMode() {
+
+
+      /*
+        Activar estado.
+      */
+
+      isProjecting =
+        true;
+
+
+      /*
+        Agregar clase al contenedor.
+
+        CSS se encarga de ocultar:
+
+        🔄 Cambiar cámara
+        ⛶ Pantalla completa
+      */
+
+      app.classList.add(
+        'projecting'
+      );
+
+
+      /*
+        Actualizar texto de ayuda.
+      */
+
+      projectionBtn.title =
+        "Salir del modo proyección";
+
+
+      projectionBtn.setAttribute(
+        'aria-label',
+        'Salir del modo proyección'
+      );
+
+
+      /*
+        Mantener pantalla encendida.
+      */
+
+      requestWakeLock();
+
+
+    }
+
+
+    /* =========================================
+       DESACTIVAR MODO PROYECCIÓN
+    ========================================= */
+
+    function disableProjectionMode() {
+
+
+      /*
+        Desactivar estado.
+      */
+
+      isProjecting =
+        false;
+
+
+      /*
+        Quitar clase.
+      */
+
+      app.classList.remove(
+        'projecting'
+      );
+
+
+      /*
+        Restaurar texto de ayuda.
+      */
+
+      projectionBtn.title =
+        "Activar modo proyección";
+
+
+      projectionBtn.setAttribute(
+        'aria-label',
+        'Activar modo proyección'
+      );
+
+
+    }
+
+
+    /* =========================================
+       ALTERNAR MODO PROYECCIÓN
+    ========================================= */
+
+    function toggleProjectionMode() {
+
+
+      if (
+        isProjecting
+      ) {
+
+
+        /*
+          Actualmente proyectando.
+
+          Volver al modo normal.
+        */
+
+        disableProjectionMode();
+
+
+      } else {
+
+
+        /*
+          Actualmente desbloqueado.
+
+          Activar proyección.
+        */
+
+        enableProjectionMode();
+
+
+      }
+
+    }
+
+
+    /* =========================================
+       BOTÓN PROYECTAR
+    ========================================= */
+
+    projectionBtn.addEventListener(
+      'click',
+      () => {
+
+
+        toggleProjectionMode();
+
+
+      }
+    );
+
+
+    /* =========================================
+       INICIAR CÁMARA
+    ========================================= */
+
+    async function startCamera() {
+
+
+      /*
+        Detener stream anterior.
+      */
+
+      if (
+        currentStream
+      ) {
+
+
+        currentStream
+          .getTracks()
+          .forEach(
+            track =>
+              track.stop()
+          );
+
+
+      }
+
+
+      try {
+
+
+        /*
+          Solicitar acceso
+          a la cámara.
+        */
+
+        const stream =
+          await navigator.mediaDevices
+            .getUserMedia({
+
+              video: {
+
+                facingMode:
+                  facingMode,
+
+                width: {
+
+                  ideal:
+                    1920
+
+                },
+
+                height: {
+
+                  ideal:
+                    1080
+
+                }
+
+              },
+
+              audio:
+                false
+
+            });
+
+
+        /*
+          Guardar stream.
+        */
+
+        currentStream =
+          stream;
+
+
+        /*
+          Mostrar cámara.
+        */
+
+        video.srcObject =
+          stream;
+
+
+        /*
+          Obtener pista de video.
+        */
+
+        videoTrack =
+          stream
+            .getVideoTracks()[0];
+
+
+        /* =====================================
+           CONFIGURAR ZOOM
+        ====================================== */
+
+        if (
+          videoTrack
+        ) {
+
+
+          const capabilities =
+            videoTrack.getCapabilities
+              ? videoTrack.getCapabilities()
+              : {};
+
+
+          if (
+            'zoom' in capabilities
+          ) {
+
+
+            minZoom =
+              capabilities.zoom.min || 1;
+
+
+            maxZoom =
+              capabilities.zoom.max || 1;
+
+
+            currentZoom =
+              minZoom;
+
+
+            /*
+              Aplicar zoom mínimo.
+            */
+
+            await videoTrack
+              .applyConstraints({
+
+                advanced: [
+
+                  {
+
+                    zoom:
+                      minZoom
+
+                  }
+
+                ]
+
+              })
+              .catch(
+                e => {
+
+
+                  console.log(
+                    "Error aplicando zoom inicial:",
+                    e
+                  );
+
+
+                }
+              );
+
+
+          }
+
+
+        }
+
+
+        /*
+          Mantener pantalla encendida.
+        */
+
+        requestWakeLock();
+
+
+      } catch (err) {
+
+
+        alert(
+          "Error al acceder a la cámara: "
+          + err.message
+        );
+
+
+      }
+
+
+    }
+
+
+    /* =========================================
+       DISTANCIA ENTRE DOS DEDOS
+    ========================================= */
+
+    function getDistance(
+      touches
+    ) {
+
+
+      const dx =
+        touches[0].clientX -
+        touches[1].clientX;
+
+
+      const dy =
+        touches[0].clientY -
+        touches[1].clientY;
+
+
+      return Math.hypot(
+        dx,
+        dy
+      );
+
+
+    }
+
+
+    /* =========================================
+       INICIO DEL PINCH ZOOM
+    ========================================= */
+
+    window.addEventListener(
+      'touchstart',
+      (e) => {
+
+
+        if (
+          e.touches.length === 2
+        ) {
+
+
+          initialPinchDistance =
+            getDistance(
+              e.touches
+            );
+
+
+        }
+
+
+      }
+    );
+
+
+    /* =========================================
+       MOVIMIENTO DEL PINCH ZOOM
+    ========================================= */
+
+    window.addEventListener(
+      'touchmove',
+      async (e) => {
+
+
+        if (
+
+          e.touches.length === 2 &&
+
+          initialPinchDistance &&
+
+          videoTrack
+
+        ) {
+
+
+          const capabilities =
+            videoTrack.getCapabilities
+              ? videoTrack.getCapabilities()
+              : {};
+
+
+          if (
+            'zoom' in capabilities
+          ) {
+
+
+            const currentDistance =
+              getDistance(
+                e.touches
+              );
+
+
+            /*
+              Sensibilidad del zoom.
+            */
+
+            const diff =
+
+              (
+                currentDistance -
+                initialPinchDistance
+              ) * 0.01;
+
+
+            /*
+              Limitar zoom
+              al rango soportado.
+            */
+
+            const newZoom =
+
+              Math.min(
+
+                Math.max(
+
+                  currentZoom +
+                  diff,
+
+                  minZoom
+
+                ),
+
+                maxZoom
+
+              );
+
+
+            try {
+
+
+              await videoTrack
+                .applyConstraints({
+
+                  advanced: [
+
+                    {
+
+                      zoom:
+                        newZoom
+
+                    }
+
+                  ]
+
+                });
+
+
+              currentZoom =
+                newZoom;
+
+
+              initialPinchDistance =
+                currentDistance;
+
+
+            } catch (err) {
+
+
+              console.log(
+                "Error al hacer zoom:",
+                err
+              );
+
+
+            }
+
+
+          }
+
+
+        }
+
+
+      }
+    );
+
+
+    /* =========================================
+       FINALIZAR PINCH ZOOM
+    ========================================= */
+
+    window.addEventListener(
+      'touchend',
+      (e) => {
+
+
+        if (
+          e.touches.length < 2
+        ) {
+
+
+          initialPinchDistance =
+            null;
+
+
+        }
+
+
+      }
+    );
+
+
+    /* =========================================
+       CAMBIAR CÁMARA
+    ========================================= */
+
+    switchBtn.addEventListener(
+      'click',
+      () => {
+
+
+        /*
+          Alternar entre cámara frontal
+          y cámara trasera.
+        */
+
+        facingMode =
+
+          facingMode === "user"
+
+            ? "environment"
+
+            : "user";
+
+
+        /*
+          Reiniciar cámara.
+        */
+
+        startCamera();
+
+
+      }
+    );
+
+
+    /* =========================================
+       PANTALLA COMPLETA
+    ========================================= */
+
+    /* =========================================
+   PANTALLA COMPLETA Y BLOQUEO DE ORIENTACIÓN
+========================================= */
+
+fullscreenBtn.addEventListener('click', async () => {
+
+  if (isProjecting) {
+    disableProjectionMode();
+  }
+
+  const appElement = document.getElementById('app');
+
+  if (!document.fullscreenElement) {
+    try {
+      await appElement.requestFullscreen();
+      
+      // Bloquear pantalla en modo horizontal tras entrar a pantalla completa
+      if (screen.orientation && screen.orientation.lock) {
+        await screen.orientation.lock('landscape');
+      }
+    } catch (err) {
+      alert("Error al activar pantalla completa: " + err.message);
+    }
+  } else {
+    document.exitFullscreen();
+    
+    // Liberar la orientación si sale de pantalla completa
+    if (screen.orientation && screen.orientation.unlock) {
+      screen.orientation.unlock();
+    }
+  }
+
+});
+
+
+    /* =========================================
+       RECUPERAR WAKE LOCK
+    ========================================= */
+
+    document.addEventListener(
+      'visibilitychange',
+      () => {
+
+
+        if (
+          document.visibilityState ===
+          'visible'
+        ) {
+
+
+          requestWakeLock();
+
+
+        }
+
+
+      }
+    );
+
+
+    /* =========================================
+       INICIAR APLICACIÓN
+    ========================================= */
+
+    startCamera();
+
+
+  </script>
+
+
+</body>
+
+</html>
