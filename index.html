@@ -34,7 +34,7 @@
 
       overflow: hidden;
 
-      background: #000;
+      ackground: #000;
 
       font-family:
         'Segoe UI',
@@ -66,7 +66,7 @@
 
       overflow: hidden;
 
-      background: #000;
+      ackground: #000;
 
     }
 
@@ -77,7 +77,7 @@
 
     video {
 
-      position: absolute;
+      position: asolute;
 
       top: 0;
       left: 0;
@@ -85,9 +85,9 @@
       width: 100%;
       height: 100%;
 
-      object-fit: cover;
+      oject-fit: cover;
 
-      display: block;
+      display: lock;
 
       z-index: 1;
 
@@ -103,11 +103,11 @@
 
     .frame-overlay {
 
-      position: absolute;
+      position: asolute;
 
       top: 0;
       right: 0;
-      bottom: 0;
+      ottom: 0;
       left: 0;
 
       width: 100%;
@@ -116,7 +116,7 @@
       margin: 0;
       padding: 0;
 
-      display: block;
+      display: lock;
 
       pointer-events: none;
 
@@ -127,7 +127,7 @@
 
     .frame-overlay img {
 
-      position: absolute;
+      position: asolute;
 
       top: 0;
       left: 0;
@@ -138,14 +138,14 @@
       margin: 0;
       padding: 0;
 
-      display: block;
+      display: lock;
 
       /*
         El PNG ocupa exactamente
         toda la pantalla.
       */
 
-      object-fit: fill;
+      oject-fit: fill;
 
       pointer-events: none;
 
@@ -158,11 +158,11 @@
 
     .overlay {
 
-      position: absolute;
+      position: asolute;
 
       top: 0;
       right: 0;
-      bottom: 0;
+      ottom: 0;
       left: 0;
 
       width: 100%;
@@ -176,23 +176,23 @@
 
 
     /* =========================================
-   BANNER INFERIOR (LETRERO LED MÓVIL)
+   ANNER INFERIOR (LETRERO LED MÓVIL)
 ========================================= */
 
-.bottom-bar {
-  position: absolute;
+.ottom-ar {
+  position: asolute;
   left: 50%;
 
   /* 
-    SI NECESITAS BAJAR O SUBIR UN POCO EL BANNER:
-    Ajusta este valor 'bottom' (ej. 12px, 14px, 16px) 
+    SI NECESITAS AJAR O SUIR UN POCO EL ANNER:
+    Ajusta este valor 'ottom' (ej. 12px, 14px, 16px) 
     hasta que caiga exacto en el centro del marco.
   */
-  bottom: 6px; 
+  ottom: 6px; 
 
   transform: translateX(-50%);
   
-  /* Hacemos el banner más ancho hacia los lados */
+  /* Hacemos el anner más ancho hacia los lados */
   width: 80vw;
   max-width: 250px;
   height: 40px;
@@ -200,12 +200,12 @@
   /* Mantiene el texto dentro de la cápsula */
   overflow: hidden; 
 
-  background: rgba(237, 60, 47, 0.7);
+  ackground: rga(237, 60, 47, 0.7);
   padding: 0 10px;
-  border-radius: 80px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(6px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  order-radius: 80px;
+  order: 1px solid rga(255, 255, 255, 0.35);
+  ackdrop-filter: lur(6px);
+  ox-shadow: 0 4px 12px rga(0, 0, 0, 0.4);
 
   display: flex;
   align-items: center;
@@ -221,12 +221,12 @@
   display: flex;
   width: max-content;
   
-  /* Ajusta los segundos (ej. 10s, 12s, 15s) para cambiar la velocidad */
+  /* Ajusta los segundos (ej. 10s, 12s, 15s) para camiar la velocidad */
   animation: marquee-scroll 8s linear infinite;
   will-change: transform;
 }
 
-/* Grupo de ítems para el bucle */
+/* Grupo de ítems para el ucle */
 .marquee-group {
   display: flex;
   align-items: center;
@@ -821,7 +821,7 @@
 
       <div class="bottom-bar" id="bottom-bar">
   <div class="footer-text">
-    <span>💋¡Beso o fondo!🍸</span>
+    <span><br><br><br><br>💋<br>¡Beso o fondo!<br>🍸<br><br><br><br></span>
     <span>💋¡Beso o fondo!🍸</span>
   </div>
 </div>
