@@ -176,7 +176,7 @@
 
 
     /* =========================================
-   ANNER INFERIOR (LETRERO LED MÓVIL)
+   BANNER INFERIOR (LETRERO LED MÓVIL)
 ========================================= */
 
 .bottom-bar {
@@ -184,7 +184,7 @@
   left: 50%;
 
   /* 
-    SI NECESITAS AJAR O SUIR UN POCO EL ANNER:
+    SI NECESITAS BAJAR O SUBIR UN POCO EL BANNER:
     Ajusta este valor 'bottom' (ej. 12px, 14px, 16px) 
     hasta que caiga exacto en el centro del marco.
   */
@@ -192,7 +192,7 @@
 
   transform: translateX(-50%);
   
-  /* Hacemos el anner más ancho hacia los lados */
+  /* Hacemos el banner más ancho hacia los lados */
   width: 80vw;
   max-width: 250px;
   height: 40px;
@@ -220,7 +220,7 @@
 .footer-text {
   display: flex;
   width: max-content;
-  
+  white-space: nowrap;
   /* Ajusta los segundos (ej. 10s, 12s, 15s) para camiar la velocidad */
   animation: marquee-scroll 8s linear infinite;
   will-change: transform;
@@ -238,11 +238,10 @@
   color: #fff;
   font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: 0.5px;
-  display: inline-flex;
-  align-items: center;
-  gap: 50px;
-  white-space: nowrap;
+  letter-spacing: 0.8px;
+  display: inline-block;
+  padding-right: 50px; /* <--- ESTE ESPACIO SEPARA UN TEXTO DEL OTRO */
+  box-sizing: border-box;
 }
 
 /* 
